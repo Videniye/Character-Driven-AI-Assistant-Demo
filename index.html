@@ -1,83 +1,487 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Character-Driven Assistant Project</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyx | Character-Driven AI Assistant</title>
+  <style>
+    :root {
+      --bg: #edf2ef;
+      --paper: #ffffff;
+      --paper-strong: #f8fbf9;
+      --ink: #172120;
+      --muted: #586360;
+      --accent: #2e6f73;
+      --accent-deep: #14494d;
+      --accent-warm: #b75d3b;
+      --line: rgba(23, 33, 32, 0.14);
+      --shadow: 0 20px 60px rgba(24, 48, 46, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #f8faf7 0%, var(--bg) 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1.5rem 0 4rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 2rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(46, 111, 115, 0.1);
+      color: var(--accent-deep);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+    }
+
+    h1 {
+      max-width: 10ch;
+      font-size: clamp(2.8rem, 8vw, 5.8rem);
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+    }
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    .hero p {
+      max-width: 42rem;
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.75rem;
+    }
+
+    .button,
+    .button-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1.15rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button {
+      background: var(--accent);
+      color: #f8fffd;
+      box-shadow: 0 12px 30px rgba(46, 111, 115, 0.24);
+    }
+
+    .button-secondary {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+    }
+
+    .button:hover,
+    .button-secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .status-card,
+    .card,
+    .feature {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(6px);
+      box-shadow: var(--shadow);
+    }
+
+    .status-card {
+      padding: 1.15rem;
+    }
+
+    .status-card strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 1.6rem;
+      color: var(--accent-deep);
+    }
+
+    section {
+      margin-top: 2rem;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .card {
+      padding: 1.5rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .feature {
+      padding: 1.35rem;
+    }
+
+    .feature p,
+    .feature li,
+    .card li {
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 0.65rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    .highlight-list {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .highlight-item {
+      padding: 1rem 1.1rem;
+      border-left: 4px solid var(--accent-warm);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .architecture img {
+      display: block;
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+      margin-top: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: var(--paper-strong);
+    }
+
+    .media-frame {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper-strong);
+      box-shadow: var(--shadow);
+    }
+
+    video.media-frame {
+      aspect-ratio: 16 / 9;
+      height: auto;
+    }
+
+    .project-log {
+      overflow: hidden;
+    }
+
+    .project-log summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .project-log summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .project-log summary::after {
+      content: "+";
+      flex: 0 0 auto;
+      width: 2rem;
+      height: 2rem;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--accent-deep);
+      font-weight: bold;
+    }
+
+    .project-log[open] summary::after {
+      content: "-";
+    }
+
+    .project-log .log-body {
+      margin-top: 1rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+
+    .project-log object {
+      min-height: 520px;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .tech-list span {
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--accent-deep);
+      font-weight: bold;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 860px) {
+      .status-strip,
+      .section-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 3rem 1.35rem;
+      }
+
+      .page {
+        width: min(100% - 1rem, 1100px);
+      }
+    }
+  </style>
 </head>
-
 <body>
-  <h1>Nyx: A character-driven AI Assistant</h1>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">Capstone Project</span>
+      <h1>Nyx</h1>
+      <p>
+        A character-driven AI assistant that combines conversation, memory, document understanding,
+        and practical tool use into a more personal and capable user experience.
+      </p>
+      <div class="hero-actions">
+        <a class="button" href="#features">Explore Features</a>
+        <a class="button-secondary" href="#architecture">View Architecture</a>
+      </div>
+      <div class="status-strip">
+        <div class="status-card">
+          <strong>Conversational</strong>
+          Personality-aware responses with preserved context and tone.
+        </div>
+        <div class="status-card">
+          <strong>Grounded</strong>
+          Uses uploaded files and retrieval to answer with relevant context.
+        </div>
+        <div class="status-card">
+          <strong>Extensible</strong>
+          Built to support external tools and future assistant capabilities.
+        </div>
+      </div>
+    </section>
 
-  <p>
-  Nyx is a character-driven AI assistant that blends personality, natural language interaction, and tool usage into a comprehensive user companion.
-  </p>
+    <section class="section-grid">
+      <article class="card">
+        <h2>What Nyx Does</h2>
+        <p>
+          Nyx explores what happens when an assistant feels less like a one-off chatbot and more like a
+          long-term companion. The project combines large language models, persistent memory, retrieval
+          over uploaded documents, and tool integrations to support richer and more useful conversations.
+        </p>
+      </article>
+      <aside class="card">
+        <h2>Current Focus</h2>
+        <ul>
+          <li>Refining the assistant personality and conversation flow</li>
+          <li>Improving memory and document retrieval behavior</li>
+          <li>Improving and expanding tool capabilities</li>
+        </ul>
+      </aside>
+    </section>
 
-  <h2>Overview</h2>
-  <p>Nyx is an experimental AI assistant designed to explore how conversational AI systems can become more context-aware and interactive. The assistant combines large language models with persistent memory, document retrieval, and external tool integrations to create a more capable and personalized assistant.
-The system allows users to upload documents, ask questions about their content, and interact with the assistant through a graphical interface. Nyx can also store information about the user, maintain conversational context, and access external tools such as weather services.
-Nyx is currently being developed as a Computer Science capstone project and will be presented at a university technology exhibition.</p>
+    <section id="features">
+      <h2>Core Features</h2>
+      <div class="feature-grid">
+        <article class="feature">
+          <h3>Conversational AI</h3>
+          <ul>
+            <li>Character-driven responses with a consistent voice</li>
+            <li>Context-aware dialogue using conversation history</li>
+            <li>Relationship cues informed by tone and sentiment</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Persistent Memory</h3>
+          <ul>
+            <li>Remembers user preferences, favorites, and personal details</li>
+            <li>Stores conversation history for longer-term continuity</li>
+            <li>Retrieves saved memory to personalize future interactions</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Document Understanding</h3>
+          <ul>
+            <li>Supports TXT, PDF, and DOCX uploads</li>
+            <li>Uses chunking and embeddings for retrieval</li>
+            <li>Answers questions with retrieval-augmented generation</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Tool Integration</h3>
+          <ul>
+            <li>Connects to external services such as weather APIs</li>
+            <li>Uses file-processing tools to expand assistant utility</li>
+            <li>Designed with room for future tool expansion</li>
+          </ul>
+        </article>
+      </div>
+    </section>
 
-  <h2>Demo Video</h2>
-  <p>Coming soon.</p>
+    <section class="section-grid">
+      <article class="card">
+        <h2>Why This Project Stands Out</h2>
+        <div class="highlight-list">
+          <div class="highlight-item">
+            Nyx is not just answering prompts. It is designed to remember, adapt, and feel continuous across interactions.
+          </div>
+          <div class="highlight-item">
+            The project blends personality design with practical capabilities like retrieval, files, and tool use.
+          </div>
+          <div class="highlight-item">
+            It serves as both a technical AI system and a design experiment in human-assistant relationships.
+          </div>
+        </div>
+      </article>
+      <aside class="card">
+        <h2>Demo Video</h2>
+        <video class="media-frame" controls preload="metadata">
+          <source src="nyx-demo-video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </aside>
+    </section>
 
-  <h2>Features<h2>
-  <h4>Conversational AI</h4>
-  <ul>
-    <li>Interactive assistant with a consistent character-driven personality</li>
-    <li>Context-aware responses using conversation history</li>
-    <li>Dynamic relationship tracking based on user sentiment</li>
-  </ul>
+    <section id="architecture" class="architecture card">
+      <h2>Architecture</h2>
+      <p>
+        The system routes user input through conversation handling, memory, retrieval, and tool logic so Nyx
+        can respond with both personality and grounded context.
+      </p>
+      <img src="architecture-updated.jpg" alt="Nyx architecture flow chart">
+    </section>
 
-  <h4>Persistent Memory</h4>
-  <ul>
-    <li>Stores user preferences such as likes, dislikes, favorites, and name</li>
-    <li>Maintains conversation logs for long-term context</li>
-    <li>Memory retrieval used to personalize responses</li>
-  </ul>
+    <section class="card">
+      <details class="project-log">
+        <summary>
+          <div>
+            <h2>Project Log</h2>
+            <p>
+              A detailed development record is available for reviewers who want to inspect the full build process.
+            </p>
+          </div>
+        </summary>
+        <div class="log-body">
+          <object class="media-frame" data="capstone-project-log.pdf" type="application/pdf">
+            <p>
+              The project log PDF can be opened directly:
+              <a href="capstone-project-log.pdf">Capstone Programming Project Log</a>.
+            </p>
+          </object>
+        </div>
+      </details>
+    </section>
 
-  <h4>Understanding</h4>
-  <ul>
-    <li>Upload and analyze TXT, PDF, and DOCX files</li>
-    <li>Document chunking and embedding generation</li>
-    <li>Retrieval-Augmented Generation for answering questions about uploaded documents</li>
-  </ul>
-
-  <h4>Tool Integrations</h4>
-  <ul>
-    <li>Weather information retrieval through external APIs</li>
-    <li>File reading and document processing tools</li>
-    <li>Designed for future expansion with additional capabilities</li>
-  </ul>
-
-  <h4>Graphical Interface</h4>
-  <ul>
-    <li>Desktop chat interface built with CustomTkinter</li>
-    <li>File upload support</li>
-    <li>Typing animation and conversational message layout</li>
-    <li>Toggle between local models and cloud-based models</li>
-  </ul>
-
-  <h2>Arcitecture</h2>
-  <img src="Arcitecture_upd.jpg" alt="Nyx Architecture Flow Chart" width="400" height="500">
-
-  <h2>Development Log</h2>
-  <p>Coming soon.</p>
-
-  <h2>Technologies Used</h2>
-  <p>
-    Python
-    <br>
-    Large Local Language Models (Via Ollama)
-    <br>
-    Vector Embeddings
-    <br>
-    Retrival-Augmented Generation (RAG)
-    <br>
-    CustomTkinter GUI
-    <br>
-    NLTK Sentiment Analysis
-    <br>
-    REST APIs
-  </p>
-
+    <section class="card">
+      <h2>Technology Stack</h2>
+      <p>
+        Nyx is built as a Python-based assistant system that combines local model support, retrieval workflows,
+        desktop UI development, and external API access.
+      </p>
+      <div class="tech-list">
+        <span>Python</span>
+        <span>Ollama</span>
+        <span>LLMs</span>
+        <span>Vector Embeddings</span>
+        <span>RAG</span>
+        <span>CustomTkinter</span>
+        <span>NLTK</span>
+        <span>REST APIs</span>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
